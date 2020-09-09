@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Upload a file</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <input type="file" name="uploadFile">
+            <input type="submit" value="upload">
+        </form>
+
+        {{if .Upload}}
+        <h3>Uploaded Image</h3>
+        <img src="/images/tmp/upload.jpg">
+        <h3>Bins</h3>
+        <img src="/bin/0.jpg">
+        <img src="/bin/1.jpg">
+        <img src="/bin/2.jpg">
+        <img src="/bin/3.jpg">
+        <img src="/bin/4.jpg">
+        <img src="/bin/5.jpg">
+        <img src="/bin/6.jpg">
+        <img src="/bin/7.jpg">
+        {{end}}
+    </body>
+
+</html>
