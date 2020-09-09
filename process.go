@@ -4,10 +4,17 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	_ "image/jpeg" // needed for its init function
+	"image/draw"
+	"image/jpeg"
 	"log"
 	"os"
 )
+
+func makeImage(x, y int, c color.Color) *image.RGBA {
+	m := image.NewRGBA(image.Rect(0, 0, x, y))
+	draw.Draw(m, m.Bounds(), &image.Uniform{c}, image.Point{}, draw.Src)
+	return m
+}
 
 // Process a image and return its colors average
 
@@ -22,9 +29,9 @@ func main() {
 		log.Fatal("ERROR decoding: ", err)
 	}
 	avg := color.RGBA{0, 0, 0, 0}
-	m := img.Bounds()
-	for y := m.Min.Y; y < m.Max.Y; y++ {
-		for x := m.Min.X; x < m.Max.X; x++ {
+	b := img.Bounds()
+	for y := b.Min.Y; y < b.Max.Y; y++ {
+		for x := b.Min.X; x < b.Max.X; x++ {
 			r, g, b, a := img.At(x, y).RGBA()
 			avg.R += uint8(r)
 			avg.G += uint8(g)
@@ -33,4 +40,12 @@ func main() {
 		}
 	}
 	fmt.Println("Average color is", avg)
+	res, err := os.Create("result.jpg")
+	if err != nil {
+		log.Fatal(err)
+	}
+	m := makeImage(400, 400, avg)
+	if err := jpeg.Encode(res, m, nil); err != nil {
+		log.Fatal(err)
+	}
 }
