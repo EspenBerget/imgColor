@@ -47,9 +47,6 @@ func main() {
 	o = options{Images: images}
 
 	http.HandleFunc("/", indexHandler)
-	http.HandleFunc("/result", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./result.jpg")
-	})
 	http.Handle("/bin/", http.StripPrefix("/bin", http.FileServer(http.Dir("bin"))))
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("static"))))
 
