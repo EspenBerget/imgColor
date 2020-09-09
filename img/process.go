@@ -1,4 +1,4 @@
-package main
+package img
 
 import (
 	"fmt"
@@ -18,7 +18,8 @@ func makeImage(x, y int, c color.Color) *image.RGBA {
 
 // Process a image and return its colors average
 
-func main() {
+// TODO take an name of a image file as input and process the image
+func process() {
 	reader, err := os.Open("sepia.jpg")
 	if err != nil {
 		log.Fatal("ERROR open: ", err)

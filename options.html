@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pick a Image</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <ul>
+            {{range $pic := .Images}}
+            <li>{{$pic}}</li>
+            {{end}}
+        </ul>
+    </body>
+</html>
