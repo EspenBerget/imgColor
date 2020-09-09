@@ -28,7 +28,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		o.Active = r.FormValue("image")
 	}
 	if o.Active != "" {
-		img.Process(o.Active)
+		img.Hist(o.Active)
 	}
 	t := template.Must(template.ParseFiles("options.html"))
 	t.Execute(w, o)
@@ -50,6 +50,7 @@ func main() {
 	http.HandleFunc("/result", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./result.jpg")
 	})
+	http.Handle("/bin/", http.StripPrefix("/bin", http.FileServer(http.Dir("bin"))))
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("static"))))
 
 	log.Fatal(http.ListenAndServe(":4545", nil))
