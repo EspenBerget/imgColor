@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Pick a Image</title>
+        <title>Pick an Image</title>
         <meta charset="UTF-8">
     </head>
     <body>
@@ -10,5 +10,11 @@
             <li>{{$pic}}</li>
             {{end}}
         </ul>
+        {{if .Active}}
+        <h3>{{.Active}}</h3>
+        <img src="/images/{{.Active}}">
+        <h3>Average Color</h3>
+        <img src="/images/result.jpg">
+        {{end}}
     </body>
 </html>

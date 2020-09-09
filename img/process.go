@@ -1,7 +1,6 @@
 package img
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
@@ -16,18 +15,17 @@ func makeImage(x, y int, c color.Color) *image.RGBA {
 	return m
 }
 
-// Process a image and return its colors average
-
-// TODO take an name of a image file as input and process the image
-func process() {
-	reader, err := os.Open("sepia.jpg")
+// Process takes a image name and finds the average color, then saves the result to
+// result.jpg
+func Process(name string) {
+	reader, err := os.Open("./static/" + name)
 	if err != nil {
-		log.Fatal("ERROR open: ", err)
+		log.Panic("ERROR open: ", err)
 	}
 	defer reader.Close()
 	img, _, err := image.Decode(reader)
 	if err != nil {
-		log.Fatal("ERROR decoding: ", err)
+		log.Panic("ERROR decoding: ", err)
 	}
 
 	b := img.Bounds()
@@ -48,13 +46,12 @@ func process() {
 	aa /= count
 	avg := color.RGBA{uint8(ar), uint8(ag), uint8(ab), uint8(aa)}
 
-	fmt.Println("Average color is", avg, count)
-	res, err := os.Create("result.jpg")
+	res, err := os.Create("./static/result.jpg")
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
-	m := makeImage(400, 400, avg)
+	m := makeImage(100, 100, avg)
 	if err := jpeg.Encode(res, m, nil); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }

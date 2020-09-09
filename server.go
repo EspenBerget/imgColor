@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"imgcolor/img"
 	"log"
 	"net/http"
 	"os"
@@ -17,6 +18,7 @@ func getNames(fs []os.FileInfo) []string {
 
 type options struct {
 	Images []string
+	Active string
 	// TODO
 }
 
@@ -33,14 +35,15 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	images := getNames(fileInfo)
-	o := options{Images: images}
+	o := options{Images: images, Active: "red.jpg"}
+	img.Process(o.Active)
 	t := template.Must(template.ParseFiles("options.html"))
 	t.Execute(w, o)
 }
 
 func main() {
 	http.HandleFunc("/", indexHandler)
-	//	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("static"))))
+	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("static"))))
 
 	log.Fatal(http.ListenAndServe(":4545", nil))
 }
