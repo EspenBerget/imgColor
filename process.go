@@ -28,18 +28,26 @@ func main() {
 	if err != nil {
 		log.Fatal("ERROR decoding: ", err)
 	}
-	avg := color.RGBA{0, 0, 0, 0}
+
 	b := img.Bounds()
+	var ar, ag, ab, aa, count uint32 = 0, 0, 0, 0, 0
 	for y := b.Min.Y; y < b.Max.Y; y++ {
 		for x := b.Min.X; x < b.Max.X; x++ {
 			r, g, b, a := img.At(x, y).RGBA()
-			avg.R += uint8(r)
-			avg.G += uint8(g)
-			avg.B += uint8(b)
-			avg.A += uint8(a)
+			ar += r
+			ag += g
+			ab += b
+			aa += a
+			count++
 		}
 	}
-	fmt.Println("Average color is", avg)
+	ar /= count
+	ag /= count
+	ab /= count
+	aa /= count
+	avg := color.RGBA{uint8(ar), uint8(ag), uint8(ab), uint8(aa)}
+
+	fmt.Println("Average color is", avg, count)
 	res, err := os.Create("result.jpg")
 	if err != nil {
 		log.Fatal(err)
