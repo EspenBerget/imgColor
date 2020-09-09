@@ -46,7 +46,7 @@ func Process(name string) {
 	aa /= count
 	avg := color.RGBA{uint8(ar), uint8(ag), uint8(ab), uint8(aa)}
 
-	res, err := os.Create("./static/result.jpg")
+	res, err := os.Create("result.jpg")
 	if err != nil {
 		log.Panic(err)
 	}

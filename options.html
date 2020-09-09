@@ -5,16 +5,21 @@
         <meta charset="UTF-8">
     </head>
     <body>
-        <ul>
+        <form method="POST">
+            <label for="image">Select an image:</label>
+            <select name="image" id="image">
             {{range $pic := .Images}}
-            <li>{{$pic}}</li>
+                <option value={{$pic}}>{{$pic}}</li>
             {{end}}
-        </ul>
+            </select>
+            <br />
+            <input type="submit" value="Submit">
+        </form>
         {{if .Active}}
         <h3>{{.Active}}</h3>
         <img src="/images/{{.Active}}">
         <h3>Average Color</h3>
-        <img src="/images/result.jpg">
+        <img src="/result">
         {{end}}
     </body>
 </html>

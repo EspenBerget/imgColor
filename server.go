@@ -19,30 +19,37 @@ func getNames(fs []os.FileInfo) []string {
 type options struct {
 	Images []string
 	Active string
-	// TODO
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	static, err := os.Open("static")
-	if err != nil {
-		http.Error(w, "Server Error", http.StatusInternalServerError)
-		return
-	}
-	fileInfo, err := static.Readdir(0)
-	if err != nil {
-		http.Error(w, "Server Error", http.StatusInternalServerError)
-		return
-	}
+var o options
 
-	images := getNames(fileInfo)
-	o := options{Images: images, Active: "red.jpg"}
-	img.Process(o.Active)
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		o.Active = r.FormValue("image")
+	}
+	if o.Active != "" {
+		img.Process(o.Active)
+	}
 	t := template.Must(template.ParseFiles("options.html"))
 	t.Execute(w, o)
 }
 
 func main() {
+	static, err := os.Open("static")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fileInfo, err := static.Readdir(0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	images := getNames(fileInfo)
+	o = options{Images: images}
+
 	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/result", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./result.jpg")
+	})
 	http.Handle("/images/", http.StripPrefix("/images", http.FileServer(http.Dir("static"))))
 
 	log.Fatal(http.ListenAndServe(":4545", nil))
